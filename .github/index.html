@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa" class="">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت مسابقات والیبال</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .gradient-header {
+            background: linear-gradient(to right, #b91c1c, #dc2626, #991b1b);
+        }
+        .dark .gradient-header {
+            background: linear-gradient(to right, #991b1b, #b91c1c, #dc2626);
+        }
+        body {
+            font-family: shabnam;
+            margin: 0 auto;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input, button, select {
+            padding: 8px;
+            margin: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.delete {
+            background-color: #e74c3c;
+        }
+        button.delete:hover {
+            background-color: #c0392b;
+        }
+        button.edit {
+            background-color: #2ecc71;
+        }
+        button.edit:hover {
+            background-color: #27ae60;
+        }
+        .teams-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .team-item {
+            background-color: #ffd4d4;
+            padding: 5px 10px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 15px;
+        }
+        .groups-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .group {
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .table th {
+            background-color: #3498db;
+            color: white;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        /* استایل برای ریسپانسیو */
+        @media screen and (max-width: 768px) {
+            #teamsList, #groupsContainer {
+                flex-direction: column;
+            }
+        }
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -20px;
+            top: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+        }
+        
+        .timeline-content {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 6px;
+            width: calc(100% - 40px);
+            margin-left: 20px;
+            border: 1px solid #ddd;
+        }
+        
+        .timeline-content p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .timeline-item:last-child::before {
+            display: none;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content {
+            background-color: #e0f7fa;
+        }
+        /* بخش سیستم امتیازدهی */
+.bg-white {
+    background-color: white;
+}
+.dark .bg-gray-800 {
+    background-color: #2d3748; /* رنگ برای حالت تاریک */
+}
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+.shadow-xl {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+.p-8 {
+    padding: 2rem;
+}
+.mb-8 {
+    margin-bottom: 2rem;
+}
+
+/* عنوان */
+.text-3xl {
+    font-size: 1.875rem;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.text-gray-800 {
+    color: #2d3748;
+}
+.dark .text-white {
+    color: #ffffff;
+}
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+
+/* ورودی‌ها */
+.border-2 {
+    border-width: 2px;
+}
+.border-gray-300 {
+    border-color: #e2e8f0;
+}
+.dark .border-gray-700 {
+    border-color: #4a5568;
+}
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+.px-5 {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+}
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+.w-full {
+    width: 100%;
+}
+.text-lg {
+    font-size: 1.125rem;
+}
+.focus\:outline-none:focus {
+    outline: none;
+}
+.focus\:ring-2:focus {
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.5);
+}
+.focus\:ring-orange-400:focus {
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.5);
+}
+.dark .focus\:ring-orange-500:focus {
+    box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.75);
+}
+
+/* دکمه‌ها */
+.bg-blue-600 {
+    background-color: #3182ce;
+}
+.hover\:bg-blue-700:hover {
+    background-color: #2b6cb0;
+}
+.bg-green-600 {
+    background-color: #38a169;
+}
+.bg-red-600 {
+    background-color: #e53e3e;
+}
+.hover\:bg-green-700:hover {
+    background-color: #2f855a;
+}
+.hover\:bg-red-700:hover {
+    background-color: #c53030;
+}
+.text-white {
+    color: white;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.px-6 {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+}
+.py-3 {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+.rounded-lg {
+    border-radius: 0.5rem;
+}
+.transition-all {
+    transition: all 0.2s ease;
+}
+.duration-200 {
+    transition-duration: 200ms;
+}
+.mb-6 {
+    margin-bottom: 1.5rem;
+}
+.mt-4 {
+    margin-top: 1rem;
+}
+
+/* نتایج مسابقه */
+.text-xl {
+    font-size: 1.25rem;
+}
+.font-semibold {
+    font-weight: 600;
+}
+.text-green-600 {
+    color: #48bb78;
+}
+.text-red-600 {
+    color: #e53e3e;
+}
+.standings th, .standings td {
+    text-align: center;
+    padding: 8px;
+}
+.standings tr:nth-child(1) {
+    background-color: #2ecc71;
+    color: white;
+}
+.standings tr:nth-child(2) {
+    background-color: #3498db;
+    color: white;
+}
+.standings tr:nth-child(3) {
+    background-color: #f1c40f;
+}
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: white;
+    margin: 15% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+}
+        
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-red-700 via-red-800 to-red-900 dark:from-red-900 dark:via-red-800 dark:to-red-700 text-white sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex justify-between items-center py-4 px-6">
+            <div class="text-lg font-bold sm:text-2xl"><img src="volleyball_5496293.png" alt="توپ والیبال" style="width: 25px;display: inline-block;"> مسابقات والیبال هنرستان نمونه البرز</div>
+            <button id="themeToggle" class="text-xl bg-white dark:bg-gray-800 text-gray-800 dark:text-white rounded-full p-2 shadow">
+                🌙
+            </button>
+        </div>
+    </header>
+
+    <!-- محتوای اصلی -->
+    <div class="max-w-6xl mx-auto p-6">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">افزودن و مدیریت تیم‌ها</h2>
+            <input type="text" id="teamName" class="border-2 border-gray-300 dark:border-gray-700 rounded-lg px-5 py-3 mb-6  text-lg focus:outline-none focus:ring-2 focus:ring-orange-400" placeholder="نام تیم را وارد کنید">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="addTeam()">افزودن تیم</button>
+            <div class="teams-list" id="teamsList"></div>
+        </div>
+<!-- سیستم امتیازدهی -->
+<section class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8">
+    <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">سیستم امتیازدهی مسابقات</h2>
+    <input type="number" id="maxScore" placeholder="حداکثر امتیاز ست" value="15" class="border-2 border-gray-300 dark:border-gray-700 rounded-lg px-5 py-3 mb-6 w-full text-lg focus:outline-none focus:ring-2 focus:ring-orange-400">
+    <input type="text" id="matchTeams" placeholder="نام تیم‌ها (تیم 1 vs تیم 2)" class="border-2 border-gray-300 dark:border-gray-700 rounded-lg px-5 py-3 mb-6 w-full text-lg focus:outline-none focus:ring-2 focus:ring-orange-400">
+    <button onclick="startNewMatch()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6">شروع مسابقه</button>
+
+    <div id="scoreContainer" class="mt-6">
+        <p class="text-xl font-semibold">امتیازات تیم 1: <span id="team1Score" class="text-green-600">0</span></p>
+        <p class="text-xl font-semibold">امتیازات تیم 2: <span id="team2Score" class="text-red-600">0</span></p>
+        <button onclick="addPoint(1)" class="bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mt-4">افزودن امتیاز به تیم 1</button>
+        <button onclick="addPoint(2)" class="bg-red-600 hover:bg-red-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mt-4">افزودن امتیاز به تیم 2</button>
+    </div>
+
+    <div id="matchResults" class="mt-6">
+        <!-- نتایج مسابقه نمایش داده می‌شود -->
+    </div>
+    <div id="scoreHistory" class="timeline"></div>
+</section>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">قرعه‌کشی و گروه‌بندی</h2>
+            <input type="number" class="border-2 border-gray-300 dark:border-gray-700 rounded-lg px-5 py-3 mb-6  text-lg focus:outline-none focus:ring-2 focus:ring-orange-400" id="groupCount" placeholder="تعداد گروه‌ها" min="2">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="createGroups()">انجام قرعه‌کشی</button>
+            <div class="groups-container" id="groupsContainer"></div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8" >
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">برنامه مسابقات و نتایج</h2>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="generateSchedule()">ایجاد برنامه مسابقات</button>
+            <table class="table" id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>تاریخ</th>
+                        <th>تیم میزبان</th>
+                        <th>نتیجه</th>
+                        <th>تیم مهمان</th>
+                        <th>ساعت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody"></tbody>
+            </table>
+        </div>
+
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">مدیریت اخبار</h2>
+            <textarea id="newsContent" placeholder="متن خبر را وارد کنید" rows="4" style="width: 100%;"></textarea>
+            <select id="newsCategory">
+                <option value="عمومی">عمومی</option>
+                <option value="ورزشی">ورزشی</option>
+                <option value="مسابقات">مسابقات</option>
+            </select>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="addNews()">افزودن خبر</button>
+            <div id="newsList" style="margin-top: 20px;"></div>
+        </div>
+
+        <div class="section">
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">گالری تصاویر مسابقات</h2>
+            <input type="file" id="galleryImage" accept="image/*">
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="addImage()">آپلود تصویر</button>
+            <div id="galleryList" style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;"></div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8" >
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">آمار و رکوردهای بازیکنان</h2>
+            <textarea id="playerStats" placeholder="آمار بازیکنان را وارد کنید" rows="4" style="width: 100%;"></textarea>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="addPlayerStats()">افزودن آمار</button>
+            <div id="playerStatsList" style="margin-top: 20px;"></div>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-8 mb-8">
+            <h2 class="text-3xl font-semibold text-gray-800 dark:text-white mb-6">نظرات و پیش‌بینی کاربران</h2>
+            <textarea id="userComment" placeholder="نظر یا پیش‌بینی خود را بنویسید..." rows="4" style="width: 100%;"></textarea>
+            <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 mb-6" onclick="addComment()">ارسال نظر</button>
+            <div id="pendingCommentsList" style="margin-top: 20px;"></div>
+            <h3>نظرات تاییدشده</h3>
+            <div id="commentsList" style="margin-top: 20px;"></div>
+        </div>
+        <div class="section">
+            <h2>جدول رده‌بندی</h2>
+            <select id="groupSelect" onchange="updateStandings()">
+                <option value="">انتخاب گروه</option>
+            </select>
+            <table class="table standings" id="standingsTable">
+                <thead>
+                    <tr>
+                        <th>رتبه</th>
+                        <th>تیم</th>
+                        <th>بازی</th>
+                        <th>برد</th>
+                        <th>باخت</th>
+                        <th>ست برده</th>
+                        <th>ست باخته</th>
+                        <th>امتیاز</th>
+                    </tr>
+                </thead>
+                <tbody id="standingsBody"></tbody>
+            </table>
+        </div>
+
+
+        
+
+        <!-- مودال ثبت نتیجه -->
+        <div id="resultModal" class="modal">
+            <div class="modal-content">
+                <h2>ثبت نتیجه مسابقه</h2>
+                <div id="modalContent"></div>
+                <button onclick="closeModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded mt-4">بستن</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        };
+        document.addEventListener('DOMContentLoaded', () => {
+            const themeToggle = document.querySelector('#themeToggle');
+            const currentTheme = localStorage.getItem('theme') || 'light';
+
+            if (currentTheme === 'dark') {
+                document.documentElement.classList.add('dark');
+            }
+
+            themeToggle.addEventListener('click', () => {
+                document.documentElement.classList.toggle('dark');
+                const newTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+                localStorage.setItem('theme', newTheme);
+            });
+
+            menuToggle.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        });
+
+        // تمام اسکریپت‌های شما از فایل HTML اصلی اینجا باقی می‌مانند.
+        // اسکریپت‌های موجود کپی شده و همچنان در اینجا کار خواهند کرد.
+        // به لطف Tailwind، نیازی به نوشتن استایل‌های دستی نیست.
+        // ...
+        let teams = [];
+        let groups = [];
+        let matches = [];
+        let results = {};
+        let matchResults = [];
+        let team1Score = 0;
+        let team2Score = 0;
+        let maxScore = 15; // مقدار پیش‌فرض برای امتیاز حداکثر
+        function startNewMatch() {
+            const teamsInput = document.getElementById('matchTeams').value.trim();
+            if (!teamsInput.includes('vs')) {
+                alert('نام تیم‌ها باید به فرمت "تیم 1 vs تیم 2" باشد.');
+                return;
+            }
+            const [team1, team2] = teamsInput.split('vs').map(t => t.trim());
+            
+            // ذخیره اطلاعات مسابقه جدید در آرایه matchResults
+            matchResults.push({ team1, team2, team1Score: 0, team2Score: 0, finished: false });
+            
+            // ریست کردن امتیازات
+            team1Score = 0;
+            team2Score = 0;
+            maxScore = parseInt(document.getElementById('maxScore').value) || 15;
+        
+            // بروزرسانی نمایش امتیازات
+            updateScores();
+            
+            // نمایش پیغام شروع مسابقه
+            document.getElementById('matchResults').innerText = `مسابقه ${team1} vs ${team2} شروع شد!`;
+            
+            // پاک کردن تاریخچه امتیازگیری قبلی
+            document.getElementById('scoreHistory').innerHTML = '';
+        
+            saveToLocalStorage();
+        }
+        
+        function addPoint(team) {
+            const lastMatch = matchResults[matchResults.length - 1];
+            if (lastMatch.finished) {
+                alert('این مسابقه پایان یافته است.');
+                return;
+            }
+        
+            // افزایش امتیاز تیم‌ها
+            if (team === 1) {
+                team1Score++;
+                lastMatch.team1Score = team1Score;
+            } else {
+                team2Score++;
+                lastMatch.team2Score = team2Score;
+            }
+        
+            // نمایش روند امتیازگیری
+            updateScoreHistory(team);
+        
+            // بررسی پایان مسابقه
+            if (team1Score >= maxScore || team2Score >= maxScore) {
+                lastMatch.finished = true;
+                const winner = team1Score > team2Score ? lastMatch.team1 : lastMatch.team2;
+                alert(`بازی پایان یافت! برنده: ${winner}`);
+                
+                // نمایش نتیجه پایان مسابقه
+                const result = document.createElement('p');
+                result.innerText = `پایان مسابقه! برنده تیم ${team1Score > team2Score ? '1' : '2'}`;
+                document.getElementById('matchResults').appendChild(result);
+                openModal(`مسابقه به پایان رسید! برنده تیم ${team1Score > team2Score ? '1' : '2'}`);
+            }
+            
+            // بروزرسانی نمایش امتیازات
+            updateScores();
+            saveToLocalStorage();
+        }
+        
+        function updateScores() {
+            document.getElementById('team1Score').textContent = team1Score;
+            document.getElementById('team2Score').textContent = team2Score;
+        }
+        
+        function updateScoreHistory() {
+            const scoreHistoryContainer = document.getElementById('scoreHistory');
+        
+            // ایجاد یک آیتم جدید برای تاریخچه
+            const historyItem = document.createElement('div');
+            historyItem.classList.add('timeline-item');
+        
+            // ایجاد محتوا برای تاریخچه
+            const historyContent = document.createElement('div');
+            historyContent.classList.add('timeline-content');
+        
+            // اضافه کردن اطلاعات امتیاز به محتوا
+            const team1Score = document.getElementById('team1Score').innerText;
+            const team2Score = document.getElementById('team2Score').innerText;
+            const matchResult = `امتیازات = تیم 1 : ${team1Score} vs تیم 2 : ${team2Score}`;
+        
+            const resultMessage = document.createElement('p');
+            resultMessage.innerText = matchResult;
+            historyContent.appendChild(resultMessage);
+        
+            // اضافه کردن آیتم تاریخچه به تایم لاین
+            historyItem.appendChild(historyContent);
+            scoreHistoryContainer.appendChild(historyItem);
+        
+            // اسکرول به پایین برای نمایش آخرین امتیاز
+            scoreHistoryContainer.scrollTop = scoreHistoryContainer.scrollHeight;
+        }
+        
+        
+
+        function openModal(message) {
+            const modal = document.getElementById('resultModal');
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerText = message;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('resultModal');
+            modal.style.display = 'none';
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('dark');
+        }
+        function addTeam() {
+            const teamName = document.getElementById('teamName').value.trim();
+            if (teamName && !teams.includes(teamName)) {
+                teams.push(teamName);
+                document.getElementById('teamName').value = '';
+                displayTeams();
+            }
+        }
+
+        function deleteTeam(teamName) {
+            teams = teams.filter(team => team !== teamName);
+            displayTeams();
+        }
+
+        function editTeam(oldName) {
+            const newName = prompt('نام جدید تیم را وارد کنید:', oldName);
+            if (newName && newName !== oldName) {
+                teams = teams.map(team => team === oldName ? newName : team);
+                displayTeams();
+            }
+        }
+
+        function displayTeams() {
+            const teamsList = document.getElementById('teamsList');
+            teamsList.innerHTML = '';
+            teams.forEach(team => {
+                const teamElement = document.createElement('div');
+                teamElement.className = 'team-item';
+                teamElement.innerHTML = `
+                    ${team}
+                    <button class="edit" onclick="editTeam('${team}')">ویرایش</button>
+                    <button class="delete" onclick="deleteTeam('${team}')">حذف</button>
+                `;
+                teamsList.appendChild(teamElement);
+            });
+        }
+
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        function createGroups() {
+            const groupCount = parseInt(document.getElementById('groupCount').value);
+            if (groupCount < 2 || teams.length < groupCount) {
+                alert('تعداد گروه‌ها باید حداقل 2 و کمتر از تعداد تیم‌ها باشد');
+                return;
+            }
+
+            const shuffledTeams = shuffle([...teams]);
+            groups = Array.from({ length: groupCount }, () => []);
+            
+            shuffledTeams.forEach((team, index) => {
+                groups[index % groupCount].push(team);
+            });
+
+            displayGroups();
+            updateGroupSelect();
+        }
+
+        function displayGroups() {
+            const container = document.getElementById('groupsContainer');
+            container.innerHTML = '';
+            
+            groups.forEach((group, index) => {
+                const groupElement = document.createElement('div');
+                groupElement.className = 'group';
+                groupElement.innerHTML = `<h3>گروه ${index + 1}</h3>`;
+                
+                const teamsList = document.createElement('ul');
+                group.forEach(team => {
+                    const teamItem = document.createElement('li');
+                    teamItem.textContent = team;
+                    teamsList.appendChild(teamItem);
+                });
+                
+                groupElement.appendChild(teamsList);
+                container.appendChild(groupElement);
+            });
+        }
+
+        function generateSchedule() {
+            if (groups.length === 0) {
+                alert('ابتدا گروه‌بندی را انجام دهید');
+                return;
+            }
+        
+            matches = [];
+            const startDate = new Date();
+            let matchDate = new Date(startDate);
+        
+            groups.forEach((group, groupIndex) => {
+                const groupMatches = [];
+        
+                // ایجاد تمام ترکیبات ممکن برای مسابقات هر گروه
+                for (let i = 0; i < group.length; i++) {
+                    for (let j = i + 1; j < group.length; j++) {
+                        groupMatches.push({
+                            homeTeam: group[i],
+                            awayTeam: group[j],
+                            group: groupIndex,
+                        });
+                    }
+                }
+        
+                // بازچینش مسابقات برای جلوگیری از بازی‌های پشت‌سرهم
+                const scheduledMatches = [];
+                const usedTeams = new Set();
+        
+                while (groupMatches.length > 0) {
+                    let matchFound = false;
+        
+                    for (let i = 0; i < groupMatches.length; i++) {
+                        const match = groupMatches[i];
+        
+                        // بررسی اینکه تیم‌ها در بازی قبلی حضور نداشته باشند
+                        if (
+                            !usedTeams.has(match.homeTeam) &&
+                            !usedTeams.has(match.awayTeam)
+                        ) {
+                            scheduledMatches.push(match);
+                            usedTeams.add(match.homeTeam);
+                            usedTeams.add(match.awayTeam);
+                            groupMatches.splice(i, 1); // حذف بازی از لیست
+                            matchFound = true;
+        
+                            // ریست تیم‌های استفاده‌شده بعد از دو بازی
+                            if (usedTeams.size === group.length) {
+                                usedTeams.clear();
+                            }
+        
+                            break;
+                        }
+                    }
+        
+                    // اگر هیچ بازی قابل برنامه‌ریزی نبود، ریست تیم‌ها
+                    if (!matchFound) {
+                        usedTeams.clear();
+                    }
+                }
+        
+                // زمان‌بندی مسابقات
+                scheduledMatches.forEach((match, index) => {
+                    const timeSlot = index % 2 === 0 ? '10:35' : '12:15';
+        
+                    matches.push({
+                        ...match,
+                        date: new Date(matchDate),
+                        time: timeSlot,
+                        id: matches.length,
+                    });
+        
+                    if (index % 2 === 1) {
+                        matchDate.setDate(matchDate.getDate() + 1); // تغییر روز
+                    }
+                });
+            });
+        
+            displaySchedule();
+        }
+        
+        function displaySchedule() {
+            const scheduleBody = document.getElementById('scheduleBody');
+            scheduleBody.innerHTML = '';
+        
+            matches.forEach((match) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${match.date.toLocaleDateString('fa-IR')}</td>
+                    <td>${match.homeTeam}</td>
+                    <td>-</td>
+                    <td>${match.awayTeam}</td>
+                    <td>${match.time}</td>
+                    <td>
+                        <button onclick="showResultModal(${match.id})" class="bg-green-600 text-sm hover:bg-green-700 text-white font-semibold px-2 py-1 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-green-500">
+                            ثبت نتیجه
+                        </button>
+                    </td>
+                `;
+                scheduleBody.appendChild(row);
+            });
+        }
+        
+        function showResultModal(matchId) {
+            const match = matches[matchId];
+            const modal = document.getElementById('resultModal');
+            const content = document.getElementById('modalContent');
+            
+            content.innerHTML = `
+                <p>${match.homeTeam} - ${match.awayTeam}</p>
+                <input class="border-2 border-gray-300 dark:border-gray-700 rounded-lg px-5 py-3 mb-6 text-lg focus:outline-none focus:ring-2 focus:ring-orange-400" type="number" id="homeScore" min="0" max="3" placeholder="امتیاز میزبان">
+                <input class="border-2 border-gray-300 dark:border-gray-700 rounded-lg px-5 py-3 mb-6 text-lg focus:outline-none focus:ring-2 focus:ring-orange-400" type="number" id="awayScore" min="0" max="3" placeholder="امتیاز مهمان">
+                <button onclick="saveResult(${matchId})" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    ثبت
+                </button>
+                <button onclick="document.getElementById('resultModal').style.display='none'" class="bg-gray-600 hover:bg-gray-700 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500">
+                    انصراف
+                </button>
+
+            `;
+            
+            modal.style.display = 'block';
+        }
+
+        function saveResult(matchId) {
+            const homeScore = parseInt(document.getElementById('homeScore').value);
+            const awayScore = parseInt(document.getElementById('awayScore').value);
+            
+            if (isNaN(homeScore) || isNaN(awayScore) || homeScore < 0 || awayScore < 0 || homeScore > 3 || awayScore > 3) {
+                alert('لطفاً نتیجه معتبر وارد کنید (بین 0 تا 3)');
+                return;
+            }
+
+            results[matchId] = { homeScore, awayScore };
+            document.getElementById('resultModal').style.display = 'none';
+            displaySchedule();
+            updateStandings();
+        }
+        function updateStandings() {
+            const groupIndex = document.getElementById('groupSelect').value;
+            if (groupIndex === '') return;
+
+            const standings = calculateStandings(parseInt(groupIndex));
+            displayStandings(standings);
+        }
+        function calculateStandings(groupIndex) {
+            const groupTeams = groups[groupIndex];
+            let standings = groupTeams.map(team => ({
+                name: team,
+                played: 0,
+                wins: 0,
+                losses: 0,
+                setsWon: 0,
+                setsLost: 0,
+                points: 0
+            }));
+
+            matches.filter(match => match.group === groupIndex).forEach(match => {
+                const result = results[match.id];
+                if (!result) return;
+
+                const homeTeamStats = standings.find(s => s.name === match.homeTeam);
+                const awayTeamStats = standings.find(s => s.name === match.awayTeam);
+
+                homeTeamStats.played++;
+                awayTeamStats.played++;
+                
+                homeTeamStats.setsWon += result.homeScore;
+                homeTeamStats.setsLost += result.awayScore;
+                awayTeamStats.setsWon += result.awayScore;
+                awayTeamStats.setsLost += result.homeScore;
+
+                if (result.homeScore > result.awayScore) {
+                    homeTeamStats.wins++;
+                    awayTeamStats.losses++;
+                    homeTeamStats.points += 2;
+                    if (result.awayScore >= 2) {
+                        awayTeamStats.points += 1;
+                    }
+                } else {
+                    awayTeamStats.wins++;
+                    homeTeamStats.losses++;
+                    awayTeamStats.points += 2;
+                    if (result.homeScore >= 2) {
+                        homeTeamStats.points += 1;
+                    }
+                }
+            });
+
+            // مرتب‌سازی جدول بر اساس امتیاز و تفاضل ست
+            standings.sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                const aDiff = a.setsWon - a.setsLost;
+                const bDiff = b.setsWon - b.setsLost;
+                if (bDiff !== aDiff) return bDiff - aDiff;
+                return b.setsWon - a.setsWon;
+            });
+
+            return standings;
+        }
+        function updateGroupSelect() {
+            const select = document.getElementById('groupSelect');
+            select.innerHTML = '<option value="">انتخاب گروه</option>';
+            groups.forEach((_, index) => {
+                select.innerHTML += `<option value="${index}">گروه ${index + 1}</option>`;
+            });
+        }
+        // اضافه کردن event listener برای بستن مودال
+        window.onclick = function(event) {
+            const modal = document.getElementById('resultModal');
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        }
+
+
+
+        window.onload = function() {
+            ['addTeam', 'deleteTeam', 'editTeam', 'createGroups', 'generateSchedule', 'saveResult'].forEach(functionName => {
+                const originalFunction = window[functionName];
+                if (typeof originalFunction === 'function') {
+                    window[functionName] = function(...args) {
+                        originalFunction.apply(this, args);
+                        saveToLocalStorage();
+                    };
+                } else {
+                    console.warn(`${functionName} is not defined as a function in window.`);
+                }
+            });
+        };
+        
+        // اضافه کردن قابلیت خروجی گرفتن به PDF
+        function exportToPDF() {
+            window.print();
+        }
+
+        // اضافه کردن قابلیت پاک کردن همه داده‌ها
+        function resetAll() {
+            if (confirm('آیا مطمئن هستید که می‌خواهید همه داده‌ها را پاک کنید؟')) {
+                teams = [];
+                groups = [];
+                matches = [];
+                results = {};
+                localStorage.removeItem('volleyballTournament');
+                displayTeams();
+                displayGroups();
+                displaySchedule();
+                updateGroupSelect();
+                document.getElementById('standingsBody').innerHTML = '';
+            }
+        }
+        // مدیریت داده‌های عمومی
+    let gallery = [];
+    let playerStats = [];
+    let comments = [];
+    let pendingComments = [];
+    let news = [];
+
+    
+
+    function displayMatchResults() {
+        const resultsContainer = document.getElementById('matchResults');
+        resultsContainer.innerHTML = '';
+        matchResults.forEach(match => {
+            const result = document.createElement('div');
+            result.innerHTML = `
+                <p>${match.team1} (${match.team1Score}) - ${match.team2} (${match.team2Score}) ${
+                match.finished ? '(پایان یافته)' : '(در حال برگزاری)'
+            }</p>`;
+            resultsContainer.appendChild(result);
+        });
+    }
+
+    // مدیریت اخبار
+    function addNews() {
+        const content = document.getElementById('newsContent').value.trim();
+        const category = document.getElementById('newsCategory').value;
+        if (content) {
+            news.push({ content, category, date: new Date() });
+            document.getElementById('newsContent').value = '';
+            displayNews();
+            saveToLocalStorage();
+        }
+    }
+
+    function displayNews() {
+        const newsList = document.getElementById('newsList');
+        newsList.innerHTML = '';
+        news.forEach(item => {
+            const newsItem = document.createElement('div');
+            newsItem.innerHTML = `
+                <p><strong>دسته‌بندی:</strong> ${item.category}</p>
+                <p>${item.content}</p>
+                <p style="font-size: 0.8em; color: gray;">${new Date(item.date).toLocaleString('fa-IR')}</p>
+            `;
+            newsList.appendChild(newsItem);
+        });
+    }
+
+    // مدیریت گالری
+    function addImage() {
+        const input = document.getElementById('galleryImage');
+        const file = input.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                gallery.push({ src: e.target.result });
+                displayGallery();
+                saveToLocalStorage();
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function displayGallery() {
+        const galleryList = document.getElementById('galleryList');
+        galleryList.innerHTML = '';
+        gallery.forEach((item, index) => {
+            const imgElement = document.createElement('div');
+            imgElement.innerHTML = `
+                <img src="${item.src}" style="width: 150px; height: 150px; object-fit: cover; border-radius: 8px;">
+                <button onclick="editImage(${index})">ویرایش</button>
+                <button onclick="deleteImage(${index})" class="delete">حذف</button>`;
+            galleryList.appendChild(imgElement);
+        });
+    }
+
+    function editImage(index) {
+        const newSrc = prompt('لینک جدید تصویر را وارد کنید:', gallery[index].src);
+        if (newSrc) {
+            gallery[index].src = newSrc;
+            displayGallery();
+            saveToLocalStorage();
+        }
+    }
+
+    function deleteImage(index) {
+        gallery.splice(index, 1);
+        displayGallery();
+        saveToLocalStorage();
+    }
+
+    // مدیریت آمار بازیکنان
+    function addPlayerStats() {
+        const stats = document.getElementById('playerStats').value.trim();
+        if (stats) {
+            playerStats.push({ stats, date: new Date() });
+            document.getElementById('playerStats').value = '';
+            displayPlayerStats();
+            saveToLocalStorage();
+        }
+    }
+
+    function displayPlayerStats() {
+        const statsList = document.getElementById('playerStatsList');
+        statsList.innerHTML = '';
+        playerStats.forEach(item => {
+            const statsItem = document.createElement('div');
+            statsItem.innerHTML = `
+                <p>${item.stats}</p>
+                <p style="font-size: 0.8em; color: gray;">${new Date(item.date).toLocaleString('fa-IR')}</p>`;
+            statsList.appendChild(statsItem);
+        });
+    }
+
+    // مدیریت نظرات
+    function addComment() {
+        const comment = document.getElementById('userComment').value.trim();
+        if (comment) {
+            pendingComments.push({ comment, date: new Date() });
+            document.getElementById('userComment').value = '';
+            displayPendingComments();
+        }
+    }
+
+    function displayPendingComments() {
+        const pendingList = document.getElementById('pendingCommentsList');
+        pendingList.innerHTML = '';
+        pendingComments.forEach((item, index) => {
+            const pendingItem = document.createElement('div');
+            pendingItem.innerHTML = `
+                <p>${item.comment}</p>
+                <button onclick="approveComment(${index})">تایید</button>
+                <button onclick="rejectComment(${index})" class="delete">رد</button>`;
+            pendingList.appendChild(pendingItem);
+        });
+    }
+
+    function approveComment(index) {
+        comments.push(pendingComments[index]);
+        pendingComments.splice(index, 1);
+        displayPendingComments();
+        displayComments();
+        saveToLocalStorage();
+    }
+
+    function rejectComment(index) {
+        pendingComments.splice(index, 1);
+        displayPendingComments();
+    }
+
+    function displayComments() {
+        const commentsList = document.getElementById('commentsList');
+        commentsList.innerHTML = '';
+        comments.forEach(item => {
+            const commentItem = document.createElement('div');
+            commentItem.innerHTML = `
+                <p>${item.comment}</p>
+                <p style="font-size: 0.8em; color: gray;">${new Date(item.date).toLocaleString('fa-IR')}</p>`;
+            commentsList.appendChild(commentItem);
+        });
+    }
+
+    // ذخیره‌سازی در LocalStorage
+    function saveToLocalStorage() {
+        const data = {
+            gallery,
+            playerStats,
+            comments,
+            pendingComments,
+            news,
+            matchResults,
+                teams,
+                groups,
+                matches,
+                results,
+                standings 
+            };
+        localStorage.setItem('volleyballTournament', JSON.stringify(data));
+        localStorage.setItem('matchResults', JSON.stringify(matchResults));
+    }
+
+    function loadFromLocalStorage() {
+        const savedData = localStorage.getItem('volleyballTournament');
+        if (savedData) {
+            const data = JSON.parse(savedData);
+            teams = data.teams;
+            groups = data.groups;
+            matches = data.matches;
+            results = data.results;
+            standings = data.standings || []; // بازیابی اطلاعات رده‌بندی
+    
+            // بازسازی تاریخ‌ها
+            matches.forEach(match => {
+                match.date = new Date(match.date);
+            });
+    
+            gallery = data.gallery || [];
+            playerStats = data.playerStats || [];
+            comments = data.comments || [];
+            pendingComments = data.pendingComments || [];
+            news = data.news || [];
+            matchResults = data.matchResults || [];
+    
+            // نمایش داده‌ها
+            displayTeams();
+            displayGroups();
+            displaySchedule();
+            updateGroupSelect();
+            displayGallery();
+            displayPlayerStats();
+            displayPendingComments();
+            displayComments();
+            displayNews();
+            displayStandings(standings); // نمایش رده‌بندی
+        }
+    }
+    function displayStandings(standings) {
+        const tbody = document.getElementById('standingsBody');
+        tbody.innerHTML = '';
+        
+        standings.forEach((team, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${index + 1}</td>
+                <td>${team.name}</td>
+                <td>${team.played}</td>
+                <td>${team.wins}</td>
+                <td>${team.losses}</td>
+                <td>${team.setsWon}</td>
+                <td>${team.setsLost}</td>
+                <td>${team.points}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+
+
+    document.addEventListener('DOMContentLoaded', loadFromLocalStorage);
+    </script>
+    <!-- اضافه کردن دکمه‌های جدید به پایین صفحه -->
+    <div class="section" style="text-align: center;">
+        <button onclick="exportToPDF()">خروجی PDF</button>
+        <button onclick="resetAll()" class="delete">پاک کردن همه داده‌ها</button>
+    </div>
+</body>
+</html>
